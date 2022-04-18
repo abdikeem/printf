@@ -1,91 +1,79 @@
-#include <stdio.h>
-#include <stdarg.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include "holberton.h"
-
-
-void _putchar_c(char c)
-{
-write(1, &c, 1);
-}
-
-void _putchar(va_list a)
-{
-char c;
-
-c = va_arg(a, int);
-write(1, &c, 1);
-}
-
-void print_str(va_list a)
-{
-char *c;
-
-c = va_arg(a, char *);
-while (*c != '\0')
-{
-_putchar_c(*c++);
-}
-}
-
-void print_int(void)
-{
-
-}
-
+#include "main.h"
 
 /**
- * _printf - prints output according to a format.
- * @format: input string.
- * _putchar_c - prints output according to a format.
- * @c: input string.
- * _putchar - takes in a va_list argument
- * @a: va_list list.
- * print_str -prints the string
- * Return: int, number of characters printed,
+ * print_from_to - prints a range of char addresses
+ * @start: starting address
+ * @stop: stopping address
+ * @except: except address
+ *
+ * Return: number bytes printed
  */
+int print_from_to(char *start, char *stop, char *except)
+{
+	int sum = 0;
 
-int _printf(const char *format, ...)
-{
-va_list a;
-int i, j, count;
-
-cs_t cspec[] = {
-{'c', _putchar},
-{'s', print_str},
-{'d', print_int},
-{'i', print_int}
-};
-
-if (format == NULL)
-return (0);
-
-i = j = count = 0;
-va_start(a, format);
-while (format[i])
-{
-if (format[i] == '%')
-{
-j = 0;
-while (j < 4)
-{
-if (format[i + 1] == cspec[j].cs &&
-format[i + 1] != '%')
-{
-cspec[j].f(a);
-i++;
+	while (start <= stop)
+	{
+		if (start != except)
+			sum += _putchar(*start);
+		start++;
+	}
+	return (sum);
 }
-j++;
-}
-i++;
-_putchar_c(format[i]);
-}
-else
-_putchar_c(format[i]);
-count++;
-i++;
 
+/**
+ * print_rev - prints string in reverse
+ * @ap: string
+ * @params: the parameters struct
+ *
+ * Return: number bytes printed
+ */
+int print_rev(va_list ap, params_t *params)
+{
+	int len, sum = 0;
+	char *str = va_arg(ap, char *);
+	(void)params;
+
+	if (str)
+	{
+		for (len = 0; *str; str++)
+			len++;
+		str--;
+		for (; len > 0; len--, str--)
+			sum += _putchar(*str);
+	}
+	return (sum);
 }
-return (count);
+
+/**
+ * print_rot13 - prints string in rot13
+ * @ap: string
+ * @params: the parameters struct
+ *
+ * Return: number bytes printed
+ */
+int print_rot13(va_list ap, params_t *params)
+{
+	int i, index;
+	int count = 0;
+	char arr[] =
+		"NOPQRSTUVWXYZABCDEFGHIJKLM      nopqrstuvwxyzabcdefghijklm";
+	char *a = va_arg(ap, char *);
+	(void)params;
+
+	i = 0;
+	index = 0;
+	while (a[i])
+	{
+		if ((a[i] >= 'A' && a[i] <= 'Z')
+		    || (a[i] >= 'a' && a[i] <= 'z'))
+		{
+			index = a[i] - 65;
+			count += _putchar(arr[index]);
+		}
+		else
+			count += _putchar(a[i]);
+		i++;
+	}
+	return (count);
 }
