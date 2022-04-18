@@ -1,4 +1,4 @@
-.TH _PRINTF 3 "FEB 2022" "0.1" "ALX  - _printf"
+.TH _PRINTF 3 "18/4/2022" "0.1" "ALX  - _printf"
 
 .SH NAME
 .B _printf\fR \- formatted output conversion
